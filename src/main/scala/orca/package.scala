@@ -4,7 +4,7 @@ import edu.holycross.shot.cite._
 
 package object orca {
   def prependSubref(reff: Vector[OrcaAlignment], sub: String) = {
-    if (reff.isEmpty) {
+    if ((reff.isEmpty) || (sub.isEmpty)) {
       reff
     } else {
       def urn1 = reff(0).passage

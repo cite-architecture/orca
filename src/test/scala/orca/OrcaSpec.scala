@@ -13,7 +13,7 @@ class OrcaSpec extends FlatSpec {
       case oc: OrcaCollection => assert(true)
       case  _ => fail("Should have created an OrcaCollection")
     }
-    assert (orca.analyses.size == 11)
+    assert (orca.alignments.size == 11)
   }
 
   it should "expand range references to explicitly map all contained leaf nodes"in {
@@ -21,103 +21,36 @@ class OrcaSpec extends FlatSpec {
     val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
 
     val expanded = orca.expandUrns(ilreff)
-    assert (expanded.size > orca.analyses.size)
+    assert (expanded.size > orca.alignments.size)
     for (ex <- expanded) {
       println(ex)
     }
   }
+  it should "expanded nodes should be mapped to nodes from the same version, maybe" in pending
 
-  it should "preserve subreferences in expanded containing nodes" in pending
-  it should "preserve subreferences in expanded leaf nodes" in pending
-  it should "preserve subreferences in expanded ranges containing multiple leaf nodes" in pending
-    it should "preserve subreferences in expanded ranges referring to a single leaf node" in pending
+  it should "preserve subreferences in expanded leaf nodes" in {
+    val alignment = OrcaAlignment(Cite2Urn("urn:cite2:hmt:clausereading.v1:clause3"), CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]"),Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative"),"πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων")
+
+    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
+    val expanded = alignment.expandUrn(ilreff)
+    assert(expanded(0).passage == CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]"))
+
+  }
+  it should "preserve subreferences in expanded ranges containing multiple leaf nodes" in {
+    val alignment = OrcaAlignment(Cite2Urn("urn:cite2:hmt:clausereading.v1:clause3"), CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]-1.4@ν[1]"),Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative"),"πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων")
+    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
+    val expanded = alignment.expandUrn(ilreff)
+
+    assert(expanded(0).passage == CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]"))
+    assert(expanded(1).passage == CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.4@ν[1]"))
 
 
+  }
+  it should "preserve subreferences in expanded ranges referring to a single leaf node" in pending
+
+//
 
   it should "generate analytical editions" in pending
 
-  it should "filter by URN matching on passage analyzed" in {
-    // "what do you know about Iliad 1.1?"
-    val psg = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    val firstLineAnalyses = expanded.filter(_.urnMatch(psg))
-    for (orcaAnalysis <- firstLineAnalyses) {
-      println(orcaAnalysis)
-    }
-    assert (firstLineAnalyses.size == 2)
-  }
-  it should "filter by URN matching on analysis" in {
-    // "what passages have you analyzed as indicative principal clause?"
-    val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    val indicatives = expanded.filter(_.urnMatch(analysis))
-
-    assert(indicatives.size == 11)
-
-  }
-  it should "support simultaneous filtering on passage and analysis" in {
-    val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
-    val book1 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1")
-
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    val bk1indicatives = expanded.filter(_.urnMatch(book1, analysis))
-    assert(bk1indicatives.size == 10)
-  }
-  it should "support chained filters" in {
-    val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
-    val book1 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1")
-
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    val bk1indicatives = expanded.filter(_.urnMatch(book1)).filter(_.urnMatch(analysis))
-    assert(bk1indicatives.size == 10)
-  }
-
-  it should "offer service-like aliases for counting passages" in {
-    // "how many passages have you analyzed as indicative principal clause?"
-    val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    assert(OrcaCollection(expanded).countPassages(analysis) == 11)
-  }
-  it should "offer service-like aliases for collecting passages" in {
-    // "what passages have you analyzed as indicative principal clause?"
-    val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    val indicatives = OrcaCollection(expanded).getPassages(analysis)
-
-    assert(indicatives.size == 11)
-
-  }
-
-  it should "offer service-like aliases for collecting analyses" in {
-    // "what do you know about Iliad 1.2?"
-    val psg = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    val firstLineAnalyses = OrcaCollection(expanded).getAnalyses(psg)
-
-    assert (firstLineAnalyses.size == 2)
-  }
-  it should "offer service-like aliases for counting analyses" in {
-    // "how many analyses do you have for Iliad 1.2?"
-    val psg = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    assert( OrcaCollection(expanded).countAnalyses(psg) == 2)
-
-  }
 
 }

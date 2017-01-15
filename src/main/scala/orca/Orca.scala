@@ -26,8 +26,12 @@ case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, def
     val bgnRef = trimmed.toString + u.rangeBeginParts(0)
     val psgUrn = CtsUrn(bgnRef)
     val canonical = reff.filter(_.urnMatch(psgUrn))
-    var beginIndex = reff.indexOf(canonical(0))
-    beginIndex
+    if (canonical.size != 1) {
+      throw OrcaException("No URNs found matching " + psgUrn )
+    } else {
+      var beginIndex = reff.indexOf(canonical(0))
+      beginIndex
+    }
   }
 
   def rangeEndIndex (u: CtsUrn, reff: Vector[CtsUrn]) = {
@@ -68,11 +72,22 @@ case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, def
     }
     expanded.toVector
   }
+
   def expandUrn(reff: Vector[CtsUrn]) = {
     if (passage.isRange) {
-      expandRange(reff)
+      val expanded = expandRange(reff)
+      val subref1 = prependSubref(expanded,passage.rangeBeginSubrefOption.getOrElse(""))
+      appendSubref(subref1,passage.rangeEndSubrefOption.getOrElse(""))
+
+
+
     } else if (passage.isPoint){
-      expandPoint(reff)
+      val expanded = expandPoint(reff)
+      passage.passageNodeSubrefOption match {
+        case None => expanded
+        case s: Some[String] =>  prependSubref(expanded, s.get)
+      }
+
     } else {
       //?  deal with this on upgrade to cite lib allowing
       // third value
@@ -82,19 +97,19 @@ case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, def
 
 }
 
-case class OrcaCollection (analyses: Vector[OrcaAlignment]) {
-  def urnMatch(filterUrn: CtsUrn) = {
-    analyses.filter(_.urnMatch(filterUrn))
+case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
+  def urnMatch(filterUrn: CtsUrn): Vector[OrcaAlignment] = {
+    alignments.filter(_.urnMatch(filterUrn))
   }
-  def urnMatch(filterUrn: Cite2Urn) = {
-    analyses.filter(_.urnMatch(filterUrn))
+  def urnMatch(filterUrn: Cite2Urn) : Vector[OrcaAlignment] = {
+    alignments.filter(_.urnMatch(filterUrn))
   }
-  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn) = {
-    analyses.filter(_.urnMatch(textUrn, objectUrn))
+  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn): Vector[OrcaAlignment] = {
+    alignments.filter(_.urnMatch(textUrn, objectUrn))
   }
 
-  def expandUrns(reff: Vector[CtsUrn]) = {
-    analyses.flatMap(oa => oa.expandUrn(reff))
+  def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
+    alignments.flatMap(oa => oa.expandUrn(reff))
   }
 
   def getPassages(urn: Cite2Urn) = {
