@@ -3,6 +3,12 @@ package edu.holycross.shot
 import edu.holycross.shot.cite._
 
 package object orca {
+
+
+  case class IndexedAlignment(oa: OrcaAlignment, idx: Int)
+  case class TextTriple(globalSeq: Int, txt: String, canonical: CtsUrn )
+
+
   def prependSubref(reff: Vector[OrcaAlignment], sub: String) = {
     if ((reff.isEmpty) || (sub.isEmpty)) {
       reff
