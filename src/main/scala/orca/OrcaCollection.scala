@@ -35,6 +35,29 @@ case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
     urnMatch(urn).size
   }
 
+  // baseUrn is a version- or exemplar-level URN.
+  def toCorpus(baseUrn: CtsUrn): Corpus = {
+    // vector of IndexedAlignments:
+    val indexed = alignments.zipWithIndex.map { case (oa, i) => IndexedAlignment(oa, i) }
+
+    // vector of TextTriples:
+    val triples = indexed.map( ia => TextTriple(ia.idx, ia.oa.deformation, ia.oa.passage.dropSubref) )
+
+    // map of URN -> vector of TextTriples
+    val grouped = triples.groupBy(_.canonical)
+    // map of URN -> vector of tuples of (TextTriple,Int)
+     val clusterSorted = for ( (k,v) <- grouped) yield (k, v.sortBy(_.globalSeq).zipWithIndex)
+
+     // Sequence of Vector of (TextTriple, Int) tuples
+    val nodes = for ( (k,v) <- clusterSorted) yield (v)
+    val nodesv = nodes.toVector
+
+    val newTriples = nodesv.flatMap (v => for ((tr: TextTriple,i: Int) <- v) yield ( TextTriple(globalSeq = tr.globalSeq, txt = tr.txt, canonical = CtsUrn(baseUrn.toString + tr.canonical.passageNodeRef + "." + i)) ))
+
+    val cns = newTriples.sortBy(_.globalSeq).map(tr => CitableNode(text = tr.txt, urn = tr.canonical))
+    val corpus = Corpus(cns)
+    corpus
+  }
 
 }
 
@@ -46,37 +69,4 @@ object OrcaCollection {
     OrcaCollection(alignments)
   }
 
-  // baseUrn is a version- or exemplar-level URN.
-  def toCorpus(baseUrn: CtsUrn): Corpus = {
-
-/*
-    // vector of IndexedAlignment s:
-    val indexed = orca.zipWithIndex.map { case (oa, i) => IndexedAlignment(oa, i) }
-
-    // vector of TextTriple s:
-    val triples = indexed.map( ia => TextTriple(ia.idx, ia.oa.deformation, ia.oa.passage.dropSubref) )
-
-    // map of URN -> vector of TextTriple
-    val grouped = triples.groupBy(_.canonical)
-    // map of URN -> vector of tuyples of (TextTriple,Int)
-     val clusterSorted = for ( (k,v) <- grouped) yield (k, v.sortBy(_.globalSeq).zipWithIndex)
-
-     // Sequence of Vector of (TextTriple, Int) tuples
-    val nodes = for ( (k,v) <- clusterSorted) yield (v)
-    val nodesv = nodes.toVector
-
-    val newTriples = nodesv.flatMap (v => for ((tr: TextTriple,i: Int) <- v) yield ( TextTriple(globalSeq = tr.globalSeq, txt = tr.txt, canonical = CtsUrn(baseUrn.toString + tr.canonical.passageNodeRef + "." + i)) ))
-
-    val cns = newTriples.sortBy(_.globalSeq).map(tr => CitableNode(text = tr.txt, urn = tr.canonical))
-    val corpus = Corpus(cns)*/
-/*
-zip to index
-group by urn node
-sort by index using for yield
-number per group
-flatmap out to single vector
-*/
-    val nodes = Vector.empty[CitableNode]
-    Corpus(nodes)
-  }
 }
