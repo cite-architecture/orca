@@ -10,6 +10,8 @@ scalaVersion := "2.11.7"
 resolvers += "uh-nexus" at "http://beta.hpcc.uh.edu/nexus/content/groups/public"
 
 libraryDependencies += "edu.holycross.shot" %% "cite" % "3.0.0"
+libraryDependencies += "edu.holycross.shot" %% "ohco2" % "1.0.0"
+
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" %  "test"
 libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.0.2"

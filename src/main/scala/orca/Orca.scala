@@ -1,6 +1,8 @@
 package edu.holycross.shot.orca
 
 import edu.holycross.shot.cite._
+import edu.holycross.shot.ohco2._
+
 import scala.io.Source
 import scala.collection.mutable.ArrayBuffer
 
@@ -136,7 +138,13 @@ object OrcaCollection {
     OrcaCollection(alignments)
   }
 
+  // baseUrn is a version- or exemplar-level URN.
+  def corpus(baseUrn: CtsUrn): Corpus = {
+    var buff = ArrayBuffer
 
+    val nodes = Vector.empty[CitableNode]
+    Corpus(nodes)
+  }
 }
 
 

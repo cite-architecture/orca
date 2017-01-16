@@ -15,7 +15,7 @@ class OrcaFilteringSpec extends FlatSpec {
     val expanded = orca.expandUrns(ilreff)
     val firstLineAnalyses = expanded.filter(_.urnMatch(psg))
     for (orcaAnalysis <- firstLineAnalyses) {
-      println(orcaAnalysis)
+      //println(orcaAnalysis)
     }
     assert (firstLineAnalyses.size == 2)
   }

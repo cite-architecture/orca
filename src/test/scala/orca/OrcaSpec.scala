@@ -23,7 +23,7 @@ class OrcaSpec extends FlatSpec {
     val expanded = orca.expandUrns(ilreff)
     assert (expanded.size > orca.alignments.size)
     for (ex <- expanded) {
-      println(ex)
+      //println(ex)
     }
   }
   it should "expanded nodes should be mapped to nodes from the same version, maybe" in pending
@@ -48,9 +48,6 @@ class OrcaSpec extends FlatSpec {
   }
   it should "preserve subreferences in expanded ranges referring to a single leaf node" in pending
 
-//
-
-  it should "generate analytical editions" in pending
 
 
 }
