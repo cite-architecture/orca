@@ -49,7 +49,7 @@ object OrcaCollection {
   // baseUrn is a version- or exemplar-level URN.
   def toCorpus(baseUrn: CtsUrn): Corpus = {
 
-
+/*
     // vector of IndexedAlignment s:
     val indexed = orca.zipWithIndex.map { case (oa, i) => IndexedAlignment(oa, i) }
 
@@ -68,7 +68,7 @@ object OrcaCollection {
     val newTriples = nodesv.flatMap (v => for ((tr: TextTriple,i: Int) <- v) yield ( TextTriple(globalSeq = tr.globalSeq, txt = tr.txt, canonical = CtsUrn(baseUrn.toString + tr.canonical.passageNodeRef + "." + i)) ))
 
     val cns = newTriples.sortBy(_.globalSeq).map(tr => CitableNode(text = tr.txt, urn = tr.canonical))
-    val corpus = Corpus(cns)
+    val corpus = Corpus(cns)*/
 /*
 zip to index
 group by urn node
@@ -80,49 +80,3 @@ flatmap out to single vector
     Corpus(nodes)
   }
 }
-
-case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
-  def urnMatch(filterUrn: CtsUrn): Vector[OrcaAlignment] = {
-    alignments.filter(_.urnMatch(filterUrn))
-  }
-  def urnMatch(filterUrn: Cite2Urn) : Vector[OrcaAlignment] = {
-    alignments.filter(_.urnMatch(filterUrn))
-  }
-  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn): Vector[OrcaAlignment] = {
-    alignments.filter(_.urnMatch(textUrn, objectUrn))
-  }
-
-  def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
-    alignments.flatMap(oa => oa.expandUrn(reff))
-  }
-
-  def getPassages(urn: Cite2Urn) = {
-    urnMatch(urn)
-  }
-  def countPassages(urn: Cite2Urn) = {
-    urnMatch(urn).size
-  }
-  def getAnalyses(urn: CtsUrn) = {
-    urnMatch(urn)
-  }
-  def countAnalyses(urn: CtsUrn) = {
-    urnMatch(urn).size
-  }
-
-}
-
-
-    /** Identifier for the passage of text analyzed.
-    *
-    * Rdf verbs orca/rdf/analyzes <-> analyzedBy
-    */
-
-    /** Identifier for the result of the analysis.
-    *
-    * Rdf verbs orca/rdf/hasAnalysis <-> analysisFor
-    */
-
-    /** Text reading or deformation resulting from the analysis.
-    *
-    * Rdf verb -> orca/rdf/textDeformation
-    */
