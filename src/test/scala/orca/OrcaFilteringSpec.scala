@@ -67,7 +67,7 @@ class OrcaFilteringSpec extends FlatSpec {
     val expanded = orca.expandUrns(ilreff)
     val indicatives = OrcaCollection(expanded).getPassages(analysis)
 
-    assert(indicatives.size == 11)
+    assert(indicatives.alignments.size == 11)
 
   }
 
@@ -79,7 +79,7 @@ class OrcaFilteringSpec extends FlatSpec {
     val expanded = orca.expandUrns(ilreff)
     val firstLineAnalyses = OrcaCollection(expanded).getAnalyses(psg)
 
-    assert (firstLineAnalyses.size == 2)
+    assert (firstLineAnalyses.alignments.size == 2)
   }
   it should "offer service-like aliases for counting analyses" in {
     // "how many analyses do you have for Iliad 1.2?"

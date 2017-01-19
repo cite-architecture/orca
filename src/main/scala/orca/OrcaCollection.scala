@@ -8,14 +8,14 @@ import scala.collection.mutable.ArrayBuffer
 
 
 case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
-  def urnMatch(filterUrn: CtsUrn): Vector[OrcaAlignment] = {
-    alignments.filter(_.urnMatch(filterUrn))
+  def urnMatch(filterUrn: CtsUrn): OrcaCollection = {
+    OrcaCollection(alignments.filter(_.urnMatch(filterUrn)))
   }
-  def urnMatch(filterUrn: Cite2Urn) : Vector[OrcaAlignment] = {
-    alignments.filter(_.urnMatch(filterUrn))
+  def urnMatch(filterUrn: Cite2Urn) : OrcaCollection = {
+    OrcaCollection(alignments.filter(_.urnMatch(filterUrn)))
   }
-  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn): Vector[OrcaAlignment] = {
-    alignments.filter(_.urnMatch(textUrn, objectUrn))
+  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn): OrcaCollection = {
+    OrcaCollection(alignments.filter(_.urnMatch(textUrn, objectUrn)))
   }
 
   def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
@@ -26,13 +26,13 @@ case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
     urnMatch(urn)
   }
   def countPassages(urn: Cite2Urn) = {
-    urnMatch(urn).size
+    urnMatch(urn).alignments.size
   }
   def getAnalyses(urn: CtsUrn) = {
     urnMatch(urn)
   }
   def countAnalyses(urn: CtsUrn) = {
-    urnMatch(urn).size
+    urnMatch(urn).alignments.size
   }
 
   // baseUrn is a version- or exemplar-level URN.
