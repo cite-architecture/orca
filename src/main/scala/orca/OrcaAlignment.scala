@@ -8,13 +8,13 @@ import scala.collection.mutable.ArrayBuffer
 
 case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, deformation: String) {
 
-  def urnMatch(filterUrn: CtsUrn) = {
+  def urnMatch(filterUrn: CtsUrn): Boolean = {
     passage.urnMatch(filterUrn)
   }
-  def urnMatch(filterUrn: Cite2Urn) = {
+  def urnMatch(filterUrn: Cite2Urn): Boolean = {
       analysis.urnMatch(filterUrn)
   }
-  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn) = {
+  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn): Boolean = {
     (passage.urnMatch(textUrn) && analysis.urnMatch(objectUrn) )
   }
 

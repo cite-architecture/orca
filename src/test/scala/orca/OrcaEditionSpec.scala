@@ -16,7 +16,7 @@ class OrcaEditionSpec extends FlatSpec {
 
     // test results for right total size:
     val expectedClauses = 16
-    assert( corpus.texts.size == expectedClauses)
+    assert( corpus.nodes.size == expectedClauses)
 
 
     // test a sample of the generated URNs:
@@ -25,7 +25,7 @@ class OrcaEditionSpec extends FlatSpec {
       CtsUrn("urn:cts:greekLit:tlg0012.tlg001.hmtclauses:1.2.0"),
       CtsUrn("urn:cts:greekLit:tlg0012.tlg001.hmtclauses:1.2.1")
     )
-    assert (corpus.texts.slice(0,3).map(_.urn) == expectedFirstThree)
+    assert (corpus.nodes.slice(0,3).map(_.urn) == expectedFirstThree)
   }
 
 
