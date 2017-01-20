@@ -18,6 +18,9 @@ case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, def
     (passage.urnMatch(textUrn) && analysis.urnMatch(objectUrn) )
   }
 
+  def rowString(delimiter: String) : String =  {
+    urn + delimiter + passage + delimiter + analysis + delimiter + deformation
+  }
 
   /// orca work
 

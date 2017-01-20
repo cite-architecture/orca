@@ -4,6 +4,7 @@ import edu.holycross.shot.cite._
 import edu.holycross.shot.ohco2._
 
 import scala.io.Source
+import java.io._
 import scala.collection.mutable.ArrayBuffer
 
 
@@ -33,6 +34,19 @@ case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
   }
   def countAnalyses(urn: CtsUrn) = {
     urnMatch(urn).alignments.size
+  }
+
+  def toDelimitedText(delimiter: String): String = {
+    alignments.map(_.rowString(delimiter)).mkString("\n")
+  }
+
+  def writeDelimitedTextFile(fName: String, delimiter: String) {
+    writeDelimitedTextFile(new File(fName), delimiter)
+  }
+  def writeDelimitedTextFile(f: File, delimiter: String) {
+    val pw = new PrintWriter(f)
+    pw.write(toDelimitedText(delimiter) + "\n")
+    pw.close
   }
 
   // baseUrn is a version- or exemplar-level URN.
