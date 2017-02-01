@@ -1,21 +1,42 @@
+name := "ORCA library for aligned analyses of texts"
 
-organization := "edu.holycross.shot"
-name := "orca"
+crossScalaVersions := Seq("2.10.6","2.11.8", "2.12.1")
 
-version := "1.1.0"
 
-scalaVersion := "2.12.1"
+lazy val root = project.in(file(".")).
+    aggregate(crossedJVM, crossedJS).
+    settings(
+      publish := {},
+      publishLocal := {}
 
-crossScalaVersions := Seq("2.11.8", "2.12.1")
+    )
 
-resolvers += "uh-nexus" at "http://beta.hpcc.uh.edu/nexus/content/groups/public"
+lazy val crossed = crossProject.in(file(".")).
+    settings(
+      name := "orca",
+      organization := "edu.holycross.shot",
+      version := "2.0.0",
+      licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
+      resolvers += Resolver.jcenterRepo,
+      resolvers += Resolver.bintrayRepo("neelsmith", "maven"),
+      libraryDependencies ++= Seq(
+        "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
+        "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
 
-libraryDependencies += "edu.holycross.shot" %% "cite" % "3.1.0"
-libraryDependencies += "edu.holycross.shot" %% "ohco2" % "2.1.0"
+        "edu.holycross.shot.cite" %%% "xcite" % "1.2.0",
+        "edu.holycross.shot" %%% "ohco2" % "3.0.0"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" %  "test"
-libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.0.6"
+      )
+    ).
+    jvmSettings(
 
-publishTo := Some("Sonatype Snapshots Nexus" at "http://beta.hpcc.uh.edu/nexus/content/repositories/releases/")
+    ).
+    jsSettings(
+      skip in packageJSDependencies := false,
+      persistLauncher in Compile := true,
+      persistLauncher in Test := false
 
-credentials += Credentials(Path.userHome / "nexusauth.txt" )
+    )
+
+lazy val crossedJVM = crossed.jvm
+lazy val crossedJS = crossed.js.enablePlugins(ScalaJSPlugin)
