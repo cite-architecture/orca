@@ -6,6 +6,44 @@ import scala.io.Source
 /**
 */
 class OrcaFilteringSpec extends FlatSpec {
+
+val ilreff = Vector(
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.1"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.2"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.4"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.5"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.6"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.7"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.8"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.9"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.10"),
+
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.600"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.601"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.602"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.603"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.604"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.605"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.606"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.607"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.608"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.609"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.610"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.611"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.1"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.2"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.3"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.4"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.5"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.6"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.7"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.8"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.9"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.10")
+)
+
+
   val clauses = """ORCA_URN	AnalyzedText	Analysis	textDeformation
 urn:cite2:hmt:clausereading.v1:clause1	urn:cts:greekLit:tlg0012.tlg001.fuPers:1.1-1.2@ν[2]	urn:cite2:hmt:iliadicClauses.v1:imperative	Μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος οὐλομένην
 urn:cite2:hmt:clausereading.v1:clause2	urn:cts:greekLit:tlg0012.tlg001.fuPers:1.2@ἣ[1]-1.2@ε[2]	urn:cite2:hmt:iliadicClauses.v1:indicative	ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε
@@ -21,50 +59,47 @@ urn:cite2:hmt:clausereading.v1:clause11	urn:cts:greekLit:tlg0012.tlg001.fuPers:2
 """
 
   val orca = OrcaCollection(clauses)
+  val expanded = orca.expandUrns(ilreff)
 
-
-  "An ORCA Collection" should "filter by URN matching on passage analyzed" in pending /*{
+  "An ORCA Collection" should "filter by URN matching on passage analyzed" in  {
     // "what do you know about Iliad 1.1?"
     val psg = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
-    val firstLineAnalyses = expanded.filter(_.urnMatch(psg))
-    for (orcaAnalysis <- firstLineAnalyses) {
+    //val firstLineAnalyses = expanded.filter(_.urnMatch(psg))
+    val firstLineAnalyses = OrcaCollection(expanded).urnMatch(psg)
+    for (orcaAnalysis <- firstLineAnalyses.alignments) {
       //println(orcaAnalysis)
     }
-    assert (firstLineAnalyses.size == 2)
+    assert (firstLineAnalyses.alignments.size == 2)
   }
+
+  it should "support the same query with twiddle operator" in {
+    // "what do you know about Iliad 1.1?"
+    val psg = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
+
+    val firstLineAnalyses = OrcaCollection(expanded) ~~ (psg)
+    for (orcaAnalysis <- firstLineAnalyses.alignments) {
+      //println(orcaAnalysis)
+    }
+    assert (firstLineAnalyses.alignments.size == 2)
+  }
+
 
 
   it should "filter by URN matching on analysis" in {
     // "what passages have you analyzed as indicative principal clause?"
     val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
     val indicatives = expanded.filter(_.urnMatch(analysis))
-
     assert(indicatives.size == 11)
-
   }
   it should "support simultaneous filtering on passage and analysis" in {
     val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
     val book1 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1")
-
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
     val bk1indicatives = expanded.filter(_.urnMatch(book1, analysis))
     assert(bk1indicatives.size == 10)
   }
   it should "support chained filters" in {
     val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
     val book1 = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1")
-
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
     val bk1indicatives = expanded.filter(_.urnMatch(book1)).filter(_.urnMatch(analysis))
     assert(bk1indicatives.size == 10)
   }
@@ -72,17 +107,11 @@ urn:cite2:hmt:clausereading.v1:clause11	urn:cts:greekLit:tlg0012.tlg001.fuPers:2
   it should "offer service-like aliases for counting passages" in {
     // "how many passages have you analyzed as indicative principal clause?"
     val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
     assert(OrcaCollection(expanded).countPassages(analysis) == 11)
   }
   it should "offer service-like aliases for collecting passages" in {
     // "what passages have you analyzed as indicative principal clause?"
     val analysis = Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
     val indicatives = OrcaCollection(expanded).getPassages(analysis)
 
     assert(indicatives.alignments.size == 11)
@@ -92,9 +121,6 @@ urn:cite2:hmt:clausereading.v1:clause11	urn:cts:greekLit:tlg0012.tlg001.fuPers:2
   it should "offer service-like aliases for collecting analyses" in {
     // "what do you know about Iliad 1.2?"
     val psg = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
     val firstLineAnalyses = OrcaCollection(expanded).getAnalyses(psg)
 
     assert (firstLineAnalyses.alignments.size == 2)
@@ -102,11 +128,7 @@ urn:cite2:hmt:clausereading.v1:clause11	urn:cts:greekLit:tlg0012.tlg001.fuPers:2
   it should "offer service-like aliases for counting analyses" in {
     // "how many analyses do you have for Iliad 1.2?"
     val psg = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2")
-    val orca = OrcaCollection("src/test/resources/clauses.tsv")
-    val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
-    val expanded = orca.expandUrns(ilreff)
     assert( OrcaCollection(expanded).countAnalyses(psg) == 2)
-
   }
-*/
+
 }

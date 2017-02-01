@@ -23,9 +23,22 @@ import js.annotation.JSExport
     OrcaCollection(alignments.filter(_.urnMatch(textUrn, objectUrn)))
   }
 
-  def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
-    alignments.flatMap(oa => oa.expandUrn(reff))
+
+  def ~~(filterUrn: CtsUrn): OrcaCollection = {
+    urnMatch(filterUrn)
   }
+  def ~~(filterUrn: Cite2Urn) : OrcaCollection = {
+    urnMatch(filterUrn)
+  }
+  def ~~(textUrn: CtsUrn, objectUrn: Cite2Urn): OrcaCollection = {
+    urnMatch(textUrn, objectUrn)
+  }
+
+
+
+    def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
+      alignments.flatMap(oa => oa.expandUrn(reff))
+    }
 
   def getPassages(urn: Cite2Urn) = {
     urnMatch(urn)

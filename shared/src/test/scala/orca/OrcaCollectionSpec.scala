@@ -5,7 +5,6 @@ import scala.io.Source
 import java.io._
 
 
-
 /**
 */
 class OrcaCollectionSpec extends FlatSpec {
@@ -22,6 +21,43 @@ urn:cite2:hmt:clausereading.v1:clause9	urn:cts:greekLit:tlg0012.tlg001.fuPers:1.
 urn:cite2:hmt:clausereading.v1:clause10	urn:cts:greekLit:tlg0012.tlg001.fuPers:1.10@ὀ[1]-1.10@ί[1]	urn:cite2:hmt:iliadicClauses.v1:indicative	ὀλέκοντο δὲ λαοί
 urn:cite2:hmt:clausereading.v1:clause11	urn:cts:greekLit:tlg0012.tlg001.fuPers:2.1@οὐδέ[1]-2.1@ἐΐσης[1]	urn:cite2:hmt:iliadicClauses.v1:indicative	οὐδέ τι θυμὸς ἐδεύετο δαιτὸς ἐΐσης
 """
+
+
+val ilreff = Vector(
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.1"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.2"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.4"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.5"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.6"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.7"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.8"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.9"),
+  CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.10"),
+
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.600"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.601"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.602"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.603"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.604"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.605"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.606"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.607"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.608"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.609"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.610"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.611"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.1"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.2"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.3"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.4"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.5"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.6"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.7"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.8"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.9"),
+CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.10")
+)
 
   val orca = OrcaCollection(clauses)
 
