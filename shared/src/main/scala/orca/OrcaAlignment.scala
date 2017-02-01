@@ -6,7 +6,11 @@ import edu.holycross.shot.ohco2._
 import scala.io.Source
 import scala.collection.mutable.ArrayBuffer
 
-case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, deformation: String) {
+
+import scala.scalajs.js
+import js.annotation.JSExport
+
+@JSExport case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, deformation: String) {
 
   def urnMatch(filterUrn: CtsUrn): Boolean = {
     passage.urnMatch(filterUrn)

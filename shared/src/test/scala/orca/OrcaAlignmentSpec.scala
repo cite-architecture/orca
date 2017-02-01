@@ -54,8 +54,6 @@ CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.10")
   it should "have a function to expand containing references" in pending
   it should "preserve subreferences in expanded leaf nodes" in {
     val alignment = OrcaAlignment(Cite2Urn("urn:cite2:hmt:clausereading.v1:clause3"), CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]"),Cite2Urn("urn:cite2:hmt:iliadicClauses.v1:indicative"),"πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων")
-
-
     val expanded = alignment.expandUrn(ilreff)
     assert(expanded(0).passage == CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]"))
   }
