@@ -21,6 +21,6 @@
 
 and add this to your library dependencies
 
-    "edu.holycross.shot.cite" %%% "orca" % "2.1.0"
+    "edu.holycross.shot.cite" %%% "orca" %  VERSION
 
 To build from source and test, use normal sbt commands (`compile`, `test` ...).
