@@ -1,6 +1,6 @@
 #`orca`: release notes
 
-**2.4**: to `OrcaCollection`, adds ++ and -- functions,  application of `~~` to Vectors of URNs, and filtering by `Corpus`
+**3.0**: to `OrcaCollection`, adds ++ and -- functions,  application of `~~` to Vectors of URNs, and filtering by `Corpus`.  Removes `toCorpus` method.
 
 **2.3**: adds several higher-order functions to the `OrcaCollection` class.
 
