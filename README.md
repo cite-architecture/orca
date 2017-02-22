@@ -7,7 +7,7 @@
 
 ##Current version: 2.2
 
-[Release notes](releases.md)
+Status:  **active development**. [Release notes](releases.md)
 
 ## License
 
