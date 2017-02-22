@@ -5,8 +5,8 @@ import edu.holycross.shot.ohco2._
 
 import scala.io.Source
 
-val raw = OrcaCollection("src/test/resources/clauses.tsv")
-val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
+val raw = OrcaSource.fromFile("jvm/src/test/resources/clauses.tsv")
+val ilreff = Source.fromFile("jvm/src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
 
 val orca = OrcaCollection(raw.expandUrns(ilreff))
 val corpus = orca.toCorpus(CtsUrn("urn:cts:greekLit:tlg0012.tlg001.hmtclauses:"))

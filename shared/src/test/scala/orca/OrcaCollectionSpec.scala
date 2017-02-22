@@ -69,6 +69,40 @@ CtsUrn("urn:cts:greekLit:tlg0012.tlg001.fuPers:2.10")
     assert (orca.alignments.size == 11)
   }
 
+  it should "have a size function" in {
+    assert (orca.size == 11)
+  }
+
+      it should "have a function extracting URNs for the alignment" in {
+        for (u <- orca.urns) {
+          u match {
+            case u: Cite2Urn => assert(true)
+            case _ => fail("Not a Cite2Urn: " + u)
+          }
+        }
+      }
+
+
+  it should "have a function extracting anlaysis URNs" in {
+    for (analysis <- orca.analyses) {
+      analysis match {
+        case u: Cite2Urn => assert(true)
+        case _ => fail("Not a Cite2Urn: " + analysis)
+      }
+    }
+  }
+
+
+    it should "have a function extracting CTS URNs for analyzed texts" in {
+      for (psg <- orca.texts) {
+        psg match {
+          case u: CtsUrn => assert(true)
+          case _ => fail("Not a CtsUrn: " + psg)
+        }
+      }
+    }
+
+
   it should "expand range references to explicitly map all contained leaf nodes"in  pending /*{
     val ilreff = Source.fromFile("src/test/resources/ilreff.txt").getLines.toVector.map(CtsUrn(_))
 

@@ -13,6 +13,20 @@ import js.annotation.JSExport
 
 
 @JSExport case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
+
+  def size : Int = {
+    alignments.size
+  }
+  def urns : Vector[Cite2Urn] = {
+    alignments.map(_.urn)
+  }
+  def analyses : Vector[Cite2Urn] = {
+    alignments.map(_.analysis)
+  }
+  def texts : Vector[CtsUrn] = {
+    alignments.map(_.passage)
+  }
+
   def urnMatch(filterUrn: CtsUrn): OrcaCollection = {
     OrcaCollection(alignments.filter(_.urnMatch(filterUrn)))
   }
