@@ -48,7 +48,12 @@ import js.annotation.JSExport
     urnMatch(textUrn, objectUrn)
   }
 
+  def ++(orca: OrcaCollection): OrcaCollection = {
+    val sumAligned = alignments ++ orca.alignments
+    OrcaCollection(sumAligned)
+  }
 
+  
 
     def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
       alignments.flatMap(oa => oa.expandUrn(reff))
