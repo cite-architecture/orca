@@ -76,32 +76,13 @@ import js.annotation.JSExport
     }
   }
 
-/*
-  def  ~~(urnV: Vector[Cite2Urn]): OrcaCollection = {
-    val rslts = Vector.empty
-    this.~~(urnV, OrcaCollection(rslts))
-  }
-  def ~~(urnV : Vector[Cite2Urn], resultOrca: OrcaCollection): OrcaCollection = {
-    if (urnV.isEmpty ) {
-      resultOrca
-    } else {
-      val subVect = this ~~ urnV.head
-      val newTotal = resultOrca ++ subVect
-      this ~~(urnV.tail, newTotal)
-    }
+  def ~~(c: Corpus) : OrcaCollection = {
+    this ~~ c.urns
   }
 
-*/
-
-/*
-
-    def ~~(c: Corpus) : OrcaCollection = {
-      this ~~ c.urns
-    }*/
-
-    def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
-      alignments.flatMap(oa => oa.expandUrn(reff))
-    }
+  def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
+    alignments.flatMap(oa => oa.expandUrn(reff))
+  }
 
 /*
   def getPassages(urn: Cite2Urn) = {

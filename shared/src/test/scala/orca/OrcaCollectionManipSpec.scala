@@ -34,6 +34,31 @@ class OrcaCollectionManipSpec extends FlatSpec {
     assert(orcaDiff.size == 2)
   }
 
+
+
+  it should "allow filtering by a Vector of CtsUrns" in {
+    val firstWords = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.1@Μῆνιν#urn:cite2:hmt:lextype:lexical#Μῆνιν\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.2@οὐλομένην#urn:cite2:hmt:lextype:lexical#οὐλομένην\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.3@πολλὰς#urn:cite2:hmt:lextype:lexical#πολλὰς\n"
+    val orca = OrcaCollection(firstWords,"#")
+
+    val twoLines = Vector(CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1"), CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.2"))
+
+    val orcaFiltered = orca ~~ twoLines
+    assert(orcaFiltered.size == 2)
+
+  }
+
+  it should "allow filtering by a Vector of Cite2Urns" in  {
+    val analyses = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clauseclausereading.v1:clause7#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.8#urn:cite2:hmt:iliadicClauses.v1:interrogative#Τίς τάρ σφωε θεῶν ἔριδι ξυνέηκε μάχεσθαι;\n" + "urn:cite2:hmt:clausereading.v1:clause2#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.2@ἣ[1]-1.2@ε[2]#urn:cite2:hmt:iliadicClauses.v1:indicative#ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε\n"
+    val orca = OrcaCollection(analyses,"#")
+
+    val interrog = Cite2Urn("urn:cite2:hmt:iliadicClauses:indicative")
+    val questOrca = orca ~~ interrog
+
+    assert (orca.size == 2)
+    assert(questOrca.size == 1)
+
+
+  }
 /*
     val tokens = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.1@Μῆνιν#urn:cite2:hmt:lextype:lexical#Μῆνιν\n"
 
