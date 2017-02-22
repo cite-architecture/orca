@@ -21,6 +21,18 @@ class OrcaCollectionManipSpec extends FlatSpec {
     assert (twoOrca.size == 2)
 
   }
+  it should "allow subtraction of a second collection" in {
+    val firstWords = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.1@Μῆνιν#urn:cite2:hmt:lextype:lexical#Μῆνιν\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.2@οὐλομένην#urn:cite2:hmt:lextype:lexical#οὐλομένην\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.3@πολλὰς#urn:cite2:hmt:lextype:lexical#πολλὰς\n"
+    val orca1 = OrcaCollection(firstWords,"#")
+
+
+    val ln1first = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.1@Μῆνιν#urn:cite2:hmt:lextype:lexical#Μῆνιν\n"
+    val orca2 = OrcaCollection(ln1first,"#")
+
+    assert(orca1.size == 3)
+    val orcaDiff = orca1 -- orca2
+    assert(orcaDiff.size == 2)
+  }
 
 /*
     val tokens = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.1@Μῆνιν#urn:cite2:hmt:lextype:lexical#Μῆνιν\n"
