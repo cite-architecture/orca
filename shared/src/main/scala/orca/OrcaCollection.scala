@@ -48,12 +48,14 @@ import js.annotation.JSExport
     urnMatch(textUrn, objectUrn)
   }
 
-  def ++(orca: OrcaCollection): OrcaCollection = {
-    val sumAligned = alignments ++ orca.alignments
+  def ++(orca2: OrcaCollection): OrcaCollection = {
+    val sumAligned = alignments ++ orca2.alignments
     OrcaCollection(sumAligned)
   }
 
-  
+  def --(orca2: OrcaCollection): OrcaCollection = {
+    OrcaCollection( alignments diff orca2.alignments)
+  }
 
     def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
       alignments.flatMap(oa => oa.expandUrn(reff))
@@ -86,6 +88,7 @@ import js.annotation.JSExport
   }
 
   // baseUrn is a version- or exemplar-level URN.
+/*
   def toCorpus(baseUrn: CtsUrn): Corpus = {
     // vector of IndexedAlignments:
     val indexed = alignments.zipWithIndex.map { case (oa, i) => IndexedAlignment(oa, i) }
@@ -102,12 +105,12 @@ import js.annotation.JSExport
     val nodes = for ( (k,v) <- clusterSorted) yield (v)
     val nodesv = nodes.toVector
 
-    val newTriples = nodesv.flatMap (v => for ((tr: TextTriple,i: Int) <- v) yield ( TextTriple(globalSeq = tr.globalSeq, txt = tr.txt, canonical = CtsUrn(baseUrn.toString + tr.canonical.passageNodeRef + "." + i)) ))
+    val newTriples = nodesv.flatMap (v => for ((tr: TextTriple,i: Int) <- v) yield ( TextTriple(globalSeq = tr.globalSeq, txt = tr.txt, canonical = CtsUrn(baseUrn.toString + tr.canonical.passageNodeRef + "." + i.toString)) ))
 
     val cns = newTriples.sortBy(_.globalSeq).map(tr => CitableNode(text = tr.txt, urn = tr.canonical))
     val corpus = Corpus(cns)
     corpus
-  }
+  }*/
 
 }
 
@@ -117,11 +120,5 @@ object OrcaCollection {
     val alignments = stringPairs.tail.map( arr => OrcaAlignment(Cite2Urn(arr(0)), CtsUrn(arr(1)), Cite2Urn(arr(2)), arr(3)))
     OrcaCollection(alignments)
   }
-/*
-  def apply(f: String, separator: String = "\t"): OrcaCollection = {
-    val stringPairs = Source.fromFile(f).getLines.toVector.map(_.split(separator))
-    val alignments = stringPairs.tail.map( arr => OrcaAlignment(Cite2Urn(arr(0)), CtsUrn(arr(1)), Cite2Urn(arr(2)), arr(3)))
-    OrcaCollection(alignments)
-  }
-*/
+
 }
