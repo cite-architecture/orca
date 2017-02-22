@@ -27,26 +27,6 @@ import js.annotation.JSExport
     alignments.map(_.passage)
   }
 
-  def urnMatch(filterUrn: CtsUrn): OrcaCollection = {
-    OrcaCollection(alignments.filter(_.urnMatch(filterUrn)))
-  }
-  def urnMatch(filterUrn: Cite2Urn) : OrcaCollection = {
-    OrcaCollection(alignments.filter(_.urnMatch(filterUrn)))
-  }
-  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn): OrcaCollection = {
-    OrcaCollection(alignments.filter(_.urnMatch(textUrn, objectUrn)))
-  }
-
-
-  def ~~(filterUrn: CtsUrn): OrcaCollection = {
-    urnMatch(filterUrn)
-  }
-  def ~~(filterUrn: Cite2Urn) : OrcaCollection = {
-    urnMatch(filterUrn)
-  }
-  def ~~(textUrn: CtsUrn, objectUrn: Cite2Urn): OrcaCollection = {
-    urnMatch(textUrn, objectUrn)
-  }
 
   def ++(orca2: OrcaCollection): OrcaCollection = {
     val sumAligned = alignments ++ orca2.alignments
@@ -57,22 +37,87 @@ import js.annotation.JSExport
     OrcaCollection( alignments diff orca2.alignments)
   }
 
+
+  def ~~(filterUrn: CtsUrn): OrcaCollection = {
+    OrcaCollection(alignments.filter(_ ~~ filterUrn))
+  }
+
+  def ~~(filterUrn: Cite2Urn) : OrcaCollection = {
+    //urnMatch(filterUrn)
+    OrcaCollection(alignments.filter(_.~~(filterUrn)))
+  }
+  /*
+  def ~~(textUrn: CtsUrn, objectUrn: Cite2Urn): OrcaCollection = {
+    urnMatch(textUrn, objectUrn)
+  }
+  */
+
+  def  ~~(urnV: Vector[Urn]): OrcaCollection = {
+    val rslts = Vector.empty
+    this.~~(urnV, OrcaCollection(rslts))
+  }
+  def ~~(urnV : Vector[Urn], resultOrca: OrcaCollection): OrcaCollection = {
+    if (urnV.isEmpty ) {
+      resultOrca
+    } else {
+      urnV.head match {
+        case cts: CtsUrn => {
+          val subVect = this.~~(cts)
+          val newTotal = resultOrca ++ subVect
+          this ~~(urnV.tail, newTotal)
+        }
+        case cite: Cite2Urn => {
+          val subVect = this ~~ cite
+          val newTotal = resultOrca ++ subVect
+          this ~~(urnV.tail, newTotal)
+        }
+      }
+
+    }
+  }
+
+/*
+  def  ~~(urnV: Vector[Cite2Urn]): OrcaCollection = {
+    val rslts = Vector.empty
+    this.~~(urnV, OrcaCollection(rslts))
+  }
+  def ~~(urnV : Vector[Cite2Urn], resultOrca: OrcaCollection): OrcaCollection = {
+    if (urnV.isEmpty ) {
+      resultOrca
+    } else {
+      val subVect = this ~~ urnV.head
+      val newTotal = resultOrca ++ subVect
+      this ~~(urnV.tail, newTotal)
+    }
+  }
+
+*/
+
+/*
+
+    def ~~(c: Corpus) : OrcaCollection = {
+      this ~~ c.urns
+    }*/
+
     def expandUrns(reff: Vector[CtsUrn]): Vector[OrcaAlignment] = {
       alignments.flatMap(oa => oa.expandUrn(reff))
     }
 
+/*
   def getPassages(urn: Cite2Urn) = {
-    urnMatch(urn)
+    ~~(urn)
   }
   def countPassages(urn: Cite2Urn) = {
-    urnMatch(urn).alignments.size
+    ~~(urn).alignments.size
   }
+
   def getAnalyses(urn: CtsUrn) = {
-    urnMatch(urn)
+    ~~(urn)
   }
   def countAnalyses(urn: CtsUrn) = {
-    urnMatch(urn).alignments.size
+    ~~(urn).alignments.size
   }
+*/
 
   def toDelimitedText(delimiter: String): String = {
     alignments.map(_.rowString(delimiter)).mkString("\n")

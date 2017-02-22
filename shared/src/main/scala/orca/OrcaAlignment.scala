@@ -12,14 +12,14 @@ import js.annotation.JSExport
 
 @JSExport case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, deformation: String) {
 
-  def urnMatch(filterUrn: CtsUrn): Boolean = {
-    passage.urnMatch(filterUrn)
+  def ~~(filterUrn: CtsUrn): Boolean = {
+    passage.~~(filterUrn)
   }
-  def urnMatch(filterUrn: Cite2Urn): Boolean = {
-      analysis.urnMatch(filterUrn)
+  def ~~(filterUrn: Cite2Urn): Boolean = {
+      analysis.~~(filterUrn)
   }
-  def urnMatch(textUrn: CtsUrn, objectUrn: Cite2Urn): Boolean = {
-    (passage.urnMatch(textUrn) && analysis.urnMatch(objectUrn) )
+  def ~~(textUrn: CtsUrn, objectUrn: Cite2Urn): Boolean = {
+    (passage.~~(textUrn) && analysis.~~(objectUrn) )
   }
 
   def rowString(delimiter: String) : String =  {
@@ -34,7 +34,7 @@ import js.annotation.JSExport
     def trimmed = u.dropPassage
     val bgnRef = trimmed.toString + u.rangeBeginParts(0)
     val psgUrn = CtsUrn(bgnRef)
-    val canonical = reff.filter(_.urnMatch(psgUrn))
+    val canonical = reff.filter(_.~~(psgUrn))
     if (canonical.size != 1) {
       throw OrcaException("No URNs found matching " + psgUrn )
     } else {
@@ -47,7 +47,7 @@ import js.annotation.JSExport
     def trimmed = u.dropPassage
     val bgnRef = trimmed.toString + u.rangeEndParts(0)
     val psgUrn = CtsUrn(bgnRef)
-    val canonical = reff.filter(_.urnMatch(psgUrn))
+    val canonical = reff.filter(_.~~(psgUrn))
     var beginIndex = reff.indexOf(canonical(0))
     beginIndex
   }
@@ -60,7 +60,7 @@ import js.annotation.JSExport
   def sliceNode(u: CtsUrn, reff: Vector[CtsUrn]) = {
     val trimmed = u.dropPassage
     val psgUrn = CtsUrn(trimmed.toString + u.passageNodeParts(0) )
-    reff.filter(_.urnMatch(psgUrn))
+    reff.filter(_.~~(psgUrn))
   }
 
 
