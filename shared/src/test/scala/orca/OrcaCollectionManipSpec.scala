@@ -2,6 +2,7 @@ package edu.holycross.shot.orca
 
 import org.scalatest.FlatSpec
 import edu.holycross.shot.cite._
+import edu.holycross.shot.ohco2._
 import scala.io.Source
 
 /**
@@ -59,7 +60,9 @@ class OrcaCollectionManipSpec extends FlatSpec {
 
 
   }
-/*
+
+
+  it should "allow filtering by a Corpus" in {
     val tokens = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.1@Μῆνιν#urn:cite2:hmt:lextype:lexical#Μῆνιν\n"
 
 
@@ -73,7 +76,7 @@ class OrcaCollectionManipSpec extends FlatSpec {
       val analyzedCorpus  = c ~~ orca
       assert (analyzedCorpus.size == 1)
     }
-    */
+
 
 
 
