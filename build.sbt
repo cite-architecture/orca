@@ -1,7 +1,7 @@
 name := "ORCA library for aligned analyses of texts"
 
-crossScalaVersions := Seq("2.10.6","2.11.8", "2.12.1")
-
+crossScalaVersions in ThisBuild := Seq("2.11.8", "2.12.4")
+scalaVersion := (crossScalaVersions in ThisBuild).value.last
 
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
@@ -23,20 +23,20 @@ lazy val crossed = crossProject.in(file(".")).
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
         "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
 
-        "edu.holycross.shot.cite" %%% "xcite" % "2.0.0",
-        "edu.holycross.shot" %%% "ohco2" % "5.0.0"
+
+        "edu.holycross.shot.cite" %%% "xcite" % "3.2.2",
+        "edu.holycross.shot" %%% "ohco2" % "10.5.2"
 
       )
     ).
     jvmSettings(
-
+      tutTargetDirectory := file("docs"),
+      tutSourceDirectory := file("shared/src/main/tut")
     ).
     jsSettings(
       skip in packageJSDependencies := false,
-      persistLauncher in Compile := true,
-      persistLauncher in Test := false
-
+      scalaJSUseMainModuleInitializer in Compile := true
     )
 
-lazy val crossedJVM = crossed.jvm
-lazy val crossedJS = crossed.js.enablePlugins(ScalaJSPlugin)
+lazy val crossedJVM = crossed.jvm.enablePlugins(TutPlugin)
+lazy val crossedJS = crossed.js
