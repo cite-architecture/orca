@@ -3,10 +3,10 @@ package orca {
 
 
   import scala.scalajs.js
-  import js.annotation.JSExport
+  import scala.scalajs.js.annotation._
 
 
-  @JSExport case class OrcaException(message: String = "", cause: Option[Throwable] = None) extends Exception(message) {
+  @JSExportAll case class OrcaException(message: String = "", cause: Option[Throwable] = None) extends Exception(message) {
     cause.foreach(initCause)
   }
 

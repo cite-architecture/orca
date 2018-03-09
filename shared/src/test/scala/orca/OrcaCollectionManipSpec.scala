@@ -22,6 +22,7 @@ class OrcaCollectionManipSpec extends FlatSpec {
     assert (twoOrca.size == 2)
 
   }
+
   it should "allow subtraction of a second collection" in {
     val firstWords = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.1@Μῆνιν#urn:cite2:hmt:lextype:lexical#Μῆνιν\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.2@οὐλομένην#urn:cite2:hmt:lextype:lexical#οὐλομένην\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.3@πολλὰς#urn:cite2:hmt:lextype:lexical#πολλὰς\n"
     val orca1 = OrcaCollection(firstWords,"#")
@@ -36,7 +37,6 @@ class OrcaCollectionManipSpec extends FlatSpec {
   }
 
 
-
   it should "allow filtering by a Vector of CtsUrns" in {
     val firstWords = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.1@Μῆνιν#urn:cite2:hmt:lextype:lexical#Μῆνιν\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.2@οὐλομένην#urn:cite2:hmt:lextype:lexical#οὐλομένην\n" + "urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.msA:1.3@πολλὰς#urn:cite2:hmt:lextype:lexical#πολλὰς\n"
     val orca = OrcaCollection(firstWords,"#")
@@ -47,6 +47,7 @@ class OrcaCollectionManipSpec extends FlatSpec {
     assert(orcaFiltered.size == 2)
 
   }
+
 
   it should "allow filtering by a Vector of Cite2Urns" in  {
     val analyses = "ORCA_URN#AnalyzedText#Analysis#TextDeformation\n" + "urn:cite2:hmt:clauseclausereading.v1:clause7#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.8#urn:cite2:hmt:iliadicClauses.v1:interrogative#Τίς τάρ σφωε θεῶν ἔριδι ξυνέηκε μάχεσθαι;\n" + "urn:cite2:hmt:clausereading.v1:clause2#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.2@ἣ[1]-1.2@ε[2]#urn:cite2:hmt:iliadicClauses.v1:indicative#ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε\n"
@@ -73,7 +74,7 @@ class OrcaCollectionManipSpec extends FlatSpec {
 
       val c = Corpus(Vector(ln1, ln2))
 
-      val analyzedCorpus  = c ~~ orca
+      val analyzedCorpus  = orca ~~ c
       assert (analyzedCorpus.size == 1)
     }
 

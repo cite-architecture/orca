@@ -8,9 +8,9 @@ import scala.collection.mutable.ArrayBuffer
 
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
-@JSExport case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, deformation: String) {
+@JSExportAll case class OrcaAlignment(urn: Cite2Urn, passage: CtsUrn, analysis: Cite2Urn, deformation: String) {
 
   def ~~(filterUrn: CtsUrn): Boolean = {
     passage.~~(filterUrn)

@@ -3,16 +3,16 @@ package edu.holycross.shot.orca
 import edu.holycross.shot.cite._
 import edu.holycross.shot.ohco2._
 
-import scala.io.Source
+//import scala.io.Source
 import java.io._
 import scala.collection.mutable.ArrayBuffer
 
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 
-@JSExport case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
+@JSExportAll case class OrcaCollection (alignments: Vector[OrcaAlignment]) {
 
   def size : Int = {
     alignments.size
@@ -104,6 +104,7 @@ import js.annotation.JSExport
     alignments.map(_.rowString(delimiter)).mkString("\n")
   }
 
+/*
   def writeDelimitedTextFile(fName: String, delimiter: String) {
     writeDelimitedTextFile(new File(fName), delimiter)
   }
@@ -112,6 +113,7 @@ import js.annotation.JSExport
     pw.write(toDelimitedText(delimiter) + "\n")
     pw.close
   }
+  */
 
   // baseUrn is a version- or exemplar-level URN.
 /*
