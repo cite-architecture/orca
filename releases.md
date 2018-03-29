@@ -1,5 +1,8 @@
 #`orca`: release notes
 
+
+**4.0.2**:  Update `ohco2` library dependency.
+
 **4.0.1**: Updated `ohco2` dependency fixes a bug in handling CTS catalogs in CEX format.
 
 **4.0.0**: Breaks compatibility with earlier versions only by removing JVM-specific functions, and adding automated cross-building for multiple Scala versions in both JVM and ScalaJS environments.
