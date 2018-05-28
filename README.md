@@ -5,7 +5,7 @@
 
 `orca` is a cross-platform library for working with citable readings of citable texts.
 
-##Current version: 4.0.2
+##Current version: 4.1.0
 
 Status:  **active development**. [Release notes](releases.md)
 

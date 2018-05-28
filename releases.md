@@ -1,6 +1,8 @@
 #`orca`: release notes
 
 
+**4.1.0**:  New functionality in updated library dependencies.
+
 **4.0.2**:  Update `ohco2` library dependency.
 
 **4.0.1**: Updated `ohco2` dependency fixes a bug in handling CTS catalogs in CEX format.
