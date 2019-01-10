@@ -1,5 +1,7 @@
 #`orca`: release notes
 
+**4.3.0**:  New functionality in updated library dependencies.
+
 **4.2.0**:  New functionality in updated library dependencies.
 
 
